@@ -4,6 +4,19 @@
 \usepackage{geometry}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{cleveref}
+\graphicspath{{img/}}
+\usepackage[dvipsnames]{xcolor}
+\lstset{
+	basicstyle=\ttfamily,
+	mathescape, 
+	tabsize=4,
+	breakatwhitespace,
+	breaklines,
+	breakautoindent
+}
 \title{Verifica automatica di programmi}
 \author{Riccardo Torre}
 \begin{document}
@@ -30,38 +43,38 @@
 	\end{itemize}
 	Le annotazioni sono riconoscibili dentro il codice perché riportano la chiocciola @L\footnote{L è una label}: F\footnote{formula di logica del primo ordine che deve essere vera nello stato del programma}
 	Quindi da un programma si ottiene un programma annotato.
-	\begin{verbatim}
-		@pre: F
-		@post: G
-		<type> foo(<type_1> param_1, <type_n> param_n)
-		{
-			<block_1>
-			@L: H
-			<block_2>
-			return(  )  
-		}
-	\end{verbatim}
+	\begin{lstlisting}
+	@pre: F
+	@post: G
+	<type> foo(<type_1> param_1, <type_n> param_n)
+	{
+		<block_1>
+		@L: H
+		<block_2>
+		return(  )  
+	}
+	\end{lstlisting}
 	\textbf{Stato del programma:} è definito dall'indirizzo di programma nel PC\footnote{program counter.} e le variabili del programma (ad esempio $x:int,y:int,\, i:int,\, j:int,\, a:int[]$). Lo stato è una fotografia della memoria nell'esecuzione. 
-	\begin{verbatim}
-		PC = 0010011
-		x = 5
-		y = 0
-		j = -2 
-		[0,0,3,0,17,-1]
-	\end{verbatim}
+	\begin{lstlisting}
+	PC = 0010011
+	x = 5
+	y = 0
+	j = -2 
+	[0,0,3,0,17,-1]
+	\end{lstlisting}
 	Quindi lo stato del programma può essere visto come un assegnamento di valori del tipo richiesto al PC e a ogni variabile (parametri) del programma.
 	
-	\begin{verbatim}
-		@pre: F
-		@post: G
-		<type> foo(<type_1> param_1, <type_n> param_n)
-		{
-			<block_1>
-			@L: H
-			<block_2>
-			return(  )  
-		}
-	\end{verbatim}
+	\begin{lstlisting}
+	@pre: F
+	@post: G
+	<type> foo(<type_1> param_1, <type_n> param_n)
+	{
+		<block_1>
+		@L: H
+		<block_2>
+		return(  )  
+	}
+	\end{lstlisting}
 	Se la funzione foo viene chiamata con $ \textit{foo}(a,0,16)$ vuol dire che $param_1 = a$, $param_2 = 0$, $param_3 = 16$.  I parametri (parametri formali) sono quelli che definiscono la funzione, gli argomenti (parametri attuali) sono quelli della chiamata di funzione.)
 	\item \textbf{Metodo delle asserzioni induttive:} è un metodo per dimostrare proprietà di correttezza parziale (o in generale ``\textit{safety}'') ovvero che il programma non va in stato d'errore. 
 	Una funzione è \textit{parzialmente corretta} se per ogni ingresso che soddisfa la pre-condizione, se la funzione termina, allora l'uscita soddisfa la post-condizione\footnote{Nota: stiamo parlando degli ingressi e uscite delle funzioni di un programma, non dell'ingresso e dell'uscita di un programma.}. Parzialmente perché si ammette che la funzione debba terminare! Corretta perché pre e post-condizione sono valide. Se un'asserzione è vera nello stato $0$, e nello stato $n$, allora deve essere anche nello stato $n+1$. Questa è solo l'intuizione dell'induzione ben fondata utilizzata nel metodo delle asserzioni induttive. 
@@ -71,21 +84,46 @@
 	
 \end{enumerate}
 
-
-In un linguaggio di programmazione, un compilatore prende in ingresso un programma $P$ in un linguaggio sorgente e restituisce un programma $O$ nel linguaggio oggetto. 
-
-Un compilatore verificatore prende in ingresso un programma $P$ annotato (pre-condizioni, post-condizioni, asserzioni e programma nel linguaggio sorgente di prima). Dal compilatore verificatore ci sono due uscite: 
+\begin{figure}[thbp]
+	\centering
+	\includegraphics{compilatore}
+	\caption{compilatore.}
+	\label{fig:compilatore}
+\end{figure}
+In un linguaggio di programmazione, un compilatore (\cref{fig:compilatore}) prende in ingresso un programma $P$ in un linguaggio sorgente e restituisce un programma $O$ nel linguaggio oggetto. 
+	\begin{figure}[tbph]
+		\centering
+		\includegraphics[width=0.7\linewidth]{compilatore-verificatore}
+		\caption{compilatore verificatore.}
+		\label{fig:compilatore-verificatore}
+	\end{figure}
+	
+Un compilatore verificatore (\cref{fig:compilatore-verificatore}) prende in ingresso un programma $P$ annotato (pre-condizioni, post-condizioni, asserzioni e programma nel linguaggio sorgente di prima). Dal compilatore verificatore ci sono due uscite: 
 \begin{enumerate}
 	\item un programma $O$ nel linguaggio oggetto del compilatore precedente;
 	\item dellle formule $\{\phi_1\dots\phi_k\}$ dette \textbf{condizioni di verifica} che sono formule la cui validità assicura che il programma è parzialmente corretto se si usa solo il metodo delle asserzioni induttive e totalmente corretto se si usa anche il metodo delle funzioni d'ordine. Il metodo delle asserzioni induttive e il metodo delle funzioni d'ordine sono \textit{pienamente automatizzabili}.
 \end{enumerate}
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=\linewidth]{dimostratore-teoremi-ideale}
+	\caption{dimostratore di teoremi nel caso ideale.}
+	\label{fig:dimostratore-teoremi-ideale}
+\end{figure}
 
 $\forall i\ 1\le i\le k$ si ha che $\neg \phi_i$ in un dimostratore di teoremi che sia una \textbf{procedura di decisione} risponde con:
 \begin{itemize}
 	\item insoddisfacibile con una prova ($\phi_i$ è valida) se $\neg\phi_i$ è insoddisfacibile;
 	\item soddisfacibile con un modello se $\neg\phi_i$ è soddisfacibile.
 \end{itemize}
-Nella logica del 1° ordine, l'insoddisfacibilità o equivalentemente la validità è solo semi-decidibile. 
+
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=\linewidth]{dimostratore-teoremi-semidecidibile}
+	\caption{il dimostratore di teoremi nella logica del $1^\circ$ è semidecidibile.}
+	\label{fig:dimostratore-teoremi-semidecidibile}
+\end{figure}
+
+Nella logica del $1^\circ$ ordine, l'insoddisfacibilità o equivalentemente la validità è solo semi-decidibile. 
 
 Un dimostratore di teoremi che prende in ingresso $\neg\phi_i$ restituisce: 
 \begin{itemize}
