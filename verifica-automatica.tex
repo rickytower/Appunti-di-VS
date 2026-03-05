@@ -19,7 +19,7 @@ sorting=ynt
 \usepackage[dvipsnames]{xcolor}
 \newtheorem{theorem}{Teorema}
 \newcommand{\bitem}[1]{\item\textbf{#1:}\xspace}
-\newcommand{\data}[1]{\noindent\textbf{Lezione del giorno:}\xspace\date{#1}}
+\newcommand{\data}[1]{\bigskip\noindent\\\textbf{Lezione del giorno:}\xspace\date{#1}}
 \lstset{
 	basicstyle=\ttfamily,
 	mathescape, 
@@ -34,6 +34,7 @@ sorting=ynt
 	\maketitle
 	\tableofcontents
 	\input{lez1}
+	\input{lez2}
 \newpage
 \printbibliography
 \end{document}

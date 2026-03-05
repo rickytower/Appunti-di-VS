@@ -1,5 +1,4 @@
-
-\data{2 marzo 2026}
+\data{02/03/2026}
 \section{Alcune note iniziali}
 Il primo esame è composto da 2 prove parziali, ciascuna  vale 25\% prova iniziale + 25\% prova finale. Il restante 50\% è riservato ad un progetto individuale $$25\%PI+25\%PF+50\% P$$
 Gli altri appelli (2,3,4 e 5) sono $100\%$ esame scritto (no progetto).
@@ -101,7 +100,7 @@ In un linguaggio di programmazione, un compilatore (\cref{fig:compilatore}) pren
 Un compilatore verificatore (\cref{fig:compilatore-verificatore}) prende in ingresso un programma $P$ annotato (pre-condizioni, post-condizioni, asserzioni e programma nel linguaggio sorgente di prima) e restituisce in uscita: 
 \begin{enumerate}
 	\item un programma $O$ nel linguaggio oggetto del compilatore precedente;
-	\item delle formule $\{\phi_1\dots\phi_k\}$ dette \textbf{condizioni di verifica} che sono formule la cui validità assicura che il programma è parzialmente corretto se si usa solo il metodo delle asserzioni induttive e totalmente corretto se si usa anche il metodo delle funzioni d'ordine. Il metodo delle asserzioni induttive e il metodo delle funzioni d'ordine sono \textit{pienamente automatizzabili}.
+	\item delle formule $\{\phi_1\dots\phi_k\}$ dette \textbf{condizioni di verifica} che sono formule la cui validità assicura che il programma è parzialmente corretto se si usa solo il metodo delle asserzioni induttive e totalmente corretto se si usa anche il metodo delle funzioni d'ordine. Il metodo delle asserzioni induttive e il metodo delle funzioni d'ordine sono \textit{pienamente automatizzabili}, mentre la specifica no.
 \end{enumerate}
 Questi compilatori implementano i metodi delle asserzioni induttive e delle funzioni d'ordine. Purtroppo non sono completamente automatizzabili come in \cref{fig:dimostratore-teoremi-ideale} per il \cref{thm:Rice}.
 \begin{figure}[tbph]
@@ -129,7 +128,13 @@ Nella logica del $1^\circ$ ordine, l'insoddisfacibilità o equivalentemente la v
 Un dimostratore di teoremi che prende in ingresso $\neg\phi_i$ restituisce: 
 \begin{itemize}
 	\item insoddisfacibile\footnote{significa che è sempre falsa.} con prova se $\exists i.\neg\phi_i$ è insoddisfacibile ($\forall i.\phi_i$ è valida\footnote{è sempre vera.});
-	\item ? se $\neg\phi_i $ è soddisfacibile.
+	\item ? se $\neg\phi_i $ è soddisfacibile. 
 \end{itemize}
 
-Se $\neg\phi_i$ è non soddisfacibile, vuol dire che $\phi_i$ è in-valida (cioè non valida). Quindi si può ricostruire lo stato di non validità del programma (quando viene restituito il modello).
+Avendo a disposizione una \textbf{procedura di decisione}, vorremmo che il dimostratore rispondesse:
+\begin{itemize}
+	\item insoddisfacibile con prova se $\exists i. \neg\phi_i$ è insoddisfacibile;
+	\item soddisfacibile con un modello se $\neg\phi_i$ è soddisfacibile.
+\end{itemize}
+
+Se $\neg\phi_i$ è soddisfacibile, vuol dire che $\phi_i$, che è una formula restituita dal compilatore-verificatore, è in-valida (cioè non valida). Avere un modello permette di ricostruire, in fase di debugging, lo stato di non validità del programma quando $\phi_i$ è in-valida.
