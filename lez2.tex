@@ -1,1 +1,47 @@
 \data{05/03/2026}
+\subsection{Annotazioni}Le annotazioni sono delle formule logiche scritte dentro il codice stesso. Possono essere di 4 tipi:
+\begin{enumerate}
+	\bitem{Pre-condizioni di funzione}ciò che la funzione richiede.
+	\bitem{Post-condizioni di funzione}ciò che la funzione assicura.
+	\bitem{Inviarianti di ciclo}rappresenta quello che è vero durante tutta l'esecuzione del ciclo. Invariante nel senso che non varia il valore di verità della formula logica, che è vera prima, durante e dopo il ciclo. 
+	\bitem{Asserzioni} formule generali. Vi sono:
+	\begin{enumerate}
+		\bitem{Asserzioni per analizzare le funzioni ricorsive}non posso usare le precedenti, sono necessarie questa tipologia di asserzioni.
+		\bitem{Asserzioni al Runtime}non sempre si possono fare controlli a livello statico. Sono controlli a livello di esecuzione (a livello dinamico).
+	\end{enumerate}
+\end{enumerate}
+\paragraph{Restrizioni sintattiche}
+Le formule sono in logica del I ordine. In una formula della logica del I ordine vi sono variabili, costanti, quantificatori esistenziali e universali, funzioni, predicati e relazioni (come $>,<, \le, \ge, =,\dots$). In ciascuna formula possono essere distinte variabili libere e variabili quantificate. \paragraph{Esempio di formula in logica del I ordine}Un array è ordinato tra l'indice $l$ e l'indice $u$ se rispetta la formula in \cref{fig:sorted}.
+\begin{figure}[thbp]
+	\centering
+	\includegraphics[width=0.7\linewidth]{sorted}
+	\caption{esempio di formula in logica del I ordine.}
+	\label{fig:sorted}
+\end{figure}
+Nelle formule le variabili in senso logico (cioè tutto quello che non è una costante, né una relazione, né una funzione, né un connettivo) possono essere quantificate o libere. Le annotazioni sono formule di logica del I ordine dove le sole variabili libere sono le variabili del programma (inclusi i parametri delle funzioni) \footnote{variabili globali (se il linguagio lo ammette), variabili locali e parametri delle funzioni}. Non vogliamo che entri una variabile che non ha a che fare con il programma e non sappiamo che valore possa assumere. \\
+
+Lo stato del programma include un assegnamento di valori dei tipi appropriati alle variabili. Solo le variabili libere sono variabili del programma (quindi non sono comprese in questo caso le variabili quantificate) e a cui vengono assegnati valori che riflettono lo stato del programma. 
+
+\begin{itemize}
+	\bitem{Pre-condizione di una funzione}è una formula della logica del I ordine dove le sole variabili libere sono i parametri della funzione.
+	\bitem{Post-condizione di una funzione}è una formula della logica del I ordine dove le sole variabili libere sono i parametri della funzione e la variabile $rv$ che rappresenta il valore restituito.
+	\bitem{Invariante di ciclo e altre asserzioni}è una formula della logica del I ordine dove le sole variabili libere sono le variabili \footnote{si intende variabili locali perché nel linguaggio \texttt{PI} e per semplicità non verranno trattate le variabili globali.} della funzione dove il ciclo compare e i parametri della funzione (se servono).
+\end{itemize}
+
+\paragraph{Esempio (in linguaggio PI)}
+\begin{lstlisting}
+	 @pre: T 
+	 diventa	 @pre: $0\le l \wedge u < |a|$
+	 @post: T 
+	 diventa @post: rv=true $\iff$ $\exists j\colon l\le i \wedge j \le u\wedge j\le u \wedge a[j]=e$
+	 bool LinearSearch(int[]a, int l, int u, int e)
+	 {
+	 	@I: $l\le i\wedge \forall k\colon (l\le k<i \implies a[k]\ne e)$
+	 	for(int i := l; i $\le$ u; i := i+1){
+	 		@F: $0\le i < |a|$
+	 		if(a[i]=e)
+	 			return true;
+	 	}
+	 	return false;
+	 }
+\end{lstlisting}
