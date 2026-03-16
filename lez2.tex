@@ -30,18 +30,65 @@ Lo stato del programma include un assegnamento di valori dei tipi appropriati al
 
 \paragraph{Esempio (in linguaggio PI)}
 \begin{lstlisting}
-	 @pre: T 
-	 diventa	 @pre: $0\le l \wedge u < |a|$
-	 @post: T 
-	 diventa @post: rv=true $\iff$ $\exists j\colon l\le i \wedge j \le u\wedge j\le u \wedge a[j]=e$
+	 §\color{blue}@pre: T §
+	 diventa	 §\color{blue}@pre: $0\le l \wedge u < |a|$\color{blue}§
+	 §\color{blue}@post: T§ 
+	 diventa §\color{blue}@post: rv = true $\iff$ $\exists j\colon l\le i \wedge j \le u\wedge j\le u \wedge a[j]=e$§
 	 bool LinearSearch(int[]a, int l, int u, int e)
 	 {
-	 	@I: $l\le i\wedge \forall k\colon (l\le k<i \implies a[k]\ne e)$
+	 	§\color{blue}@I: $l\le i\wedge \forall k\colon (l\le k<i \implies a[k]\ne e)$§
 	 	for(int i := l; i $\le$ u; i := i+1){
-	 		@F: $0\le i < |a|$
+	 		§\color{blue}@E: $0\le i < |a|$§
 	 		if(a[i]=e)
 	 			return true;
 	 	}
 	 	return false;
 	 }
 \end{lstlisting}
+\paragraph{Nota}Se mettessimo l'if: \texttt{if(l < 0 $\vee$ u $\ge$ |a|) return false;} allora non avremmo più bisogno di \texttt{@pre}. Solitamente le \texttt{@pre: T} banali sono date solo per le funzioni pubbliche, ma ai fini di significatività dell'esempio non si mette l'if. In tal caso, vale che \texttt{@post} è garantita quando \texttt{@pre} è valida, altrimenti non si dice nulla sul suo comportamento. 
+\paragraph{Invarianti di ciclo nel while e nel for}
+Per un ciclo del tipo \begin{lstlisting}
+	while(<cond>){
+		<body>
+	}
+\end{lstlisting}
+l'invariante \texttt{@I:F} garantisce che la formula \texttt{F} è vera all'entrata: quando si entra nel corpo, \texttt{F $\wedge$ cond} è vero, mentre quando si esce dal ciclo, \texttt{F$\wedge\neg$ cond} è vero. Al termine di ogni iterazione, è sempre vera \texttt{F}.
+Per un ciclo del tipo 
+\begin{lstlisting}
+	for(<init>; <cond>; <inc>){
+		<body>
+	}
+\end{lstlisting}
+con l'invariante \texttt{@I:F}, lo si trasforma in 
+\begin{lstlisting}
+	<init>
+	§\color{blue}@I:F§
+	while(<cond>){
+			<body>
+			<inc>
+	}
+\end{lstlisting}
+e si ragiona in modo analogo a while, come prima.
+
+\paragraph{Asserzioni a tempo di esecuzione}Le asserzioni a tempo d'esecuzione (\texttt{@E}) servono a proteggere da 3 tipi di errori al runtime:
+\begin{itemize}
+	\bitem{Divisione per zero}
+	\begin{lstlisting}
+		§\color{blue}@E: y $\ne$ 0§
+		z := x div y;
+		z := x mod y;
+	\end{lstlisting} se staticamente possiamo dimostrare che \texttt{y$\ne$0}, allora siamo sicuri ed \texttt{@E} non è necessaria. Se tale dimostrazione non riusciamo a darla, il controllo $y\ne 0$ deve essere eseguita a tempo d'esecuzione ed è richiesto al compilatore dall'annotazione \texttt{@E} che introduce codice che esegue il controllo e gestisce l'errore.
+	\bitem{Divisione sui reali}
+	\bitem{Array out of bounds}
+	\begin{lstlisting}
+		§\color{blue}@E: n $\ge$ 0 $\wedge$ n < |a|§
+		a[m] := x;
+	\end{lstlisting}
+	\paragraph{Nota}in LinearSearch, l'asserzione \texttt{@E} non era necessaria perché il programma è già protetto da \texttt{@pre}, ma non succede niente.
+	\bitem{Dereferenziamento da null}
+	\begin{lstlisting}
+		§\color{blue}@E: p $\ne$ null§
+		*p := x; 
+	\end{lstlisting}
+\end{itemize}
+\paragraph{Nota}Tute queste asserzioni sono generabili automaticamente dal compilatore, a differenza delle invarianti di ciclo.
