@@ -1,0 +1,68 @@
+\data{16/03/2026} 
+Stiamo dimostrando la correttezza parziale, per ogni funzione.
+\paragraph{Correttezza parziale}Per ogni ingresso (valori dei parametri\footnote{ovvero gli argomenti.}) che soddisfi la pre-condizione, \textbf{se la funzione termina}, allora la post-condizione è soddisfatta. 
+\begin{enumerate}
+	\bitem{Annotazioni}includono le pre-condizioni, post-condizioni, \textbf{invarianti di ciclo} e asserzioni al runtime.
+	\bitem{Cammini di base}un \textbf{cammino di base}\footnote{questa definizione va bene sia per l'iterazione che per la ricorsione.} inizia con una precondizione o un'invariante di ciclo e termina con una post-condizione o un'invariante di ciclo o un'asserzione di altro tipo.
+	%img compilatore
+	\begin{lstlisting}
+		§\color{blue}@F§
+		$S_1$;
+		$S_2$;
+		...
+		$S_n$;
+		§\color{blue}G§
+	\end{lstlisting}
+\end{enumerate}
+Le $S_1,...,S_n$ sono istruzioni \textit{assume} e assegnamenti alle variabili della funzione.
+\subsubsection{Esempio di LinearSearch}
+\begin{lstlisting}
+	§\color{blue}@pre: $0\le l \wedge u < |a|$\color{blue}§
+	§\color{blue}@post: rv = true $\iff$ $\exists j\colon l\le i \wedge i \le u\wedge i\le u \wedge a[i]=e$§
+	bool LinearSearch(int[]a, int l, int u, int e)
+	{
+		§\color{blue}@L: $l\le i\wedge \forall j\colon (l\le j<i \implies a[j]\ne e)$§
+		for(int i := l; i $\le$ u; i := i+1){
+			§\color{blue}@E: $0\le i < |a|$§
+			if(a[i]=e) §\color{red}(II)@L \\assume i $\le$u;\\assume a[i]=e;\\rv:=true;\\@post§
+			return true;
+		}§\color{red}(I)@pre\\i:=l;\\@L§
+		return false;
+		§\color{red}@pre$\rightarrow$I§
+	}
+\end{lstlisting}
+\paragraph{Trasformatore di predicato} Sia $L$ un linguaggio di formule. Un trasformatore di predicato è il prodotto cartesiano $$p\colon L\times \texttt{<stmts>}\longrightarrow L$$ dove \texttt{<stmts>} sono istruzioni. 
+\paragraph{weakest pre-condition} È un trasformatore di predicato, è una pre-condizione più debole che $$wp(F,S)$$ prende una formula e delle istruzioni e produce una formula. %58min
+La $wp(F,S)$ è la pre-condizione più debole tale che $F$ è vera dopo aver eseguito $S$.
+\paragraph{Stato del programma}È un assegnamento al PC\footnote{Program counter.} e a tutte le variabili e i parametri della funzione. Si estende in un'interpretazione. Sia $S\colon \text{stato del programma}$. Se siamo in uno stato $s\models wp(F,S)$ e $s\,S\,s'$ e $s'$ è stato del programma allora $s'\models F$.
+\begin{figure}[thbp]
+	\centering
+	\includegraphics[width=0.7\linewidth]{wp}
+	\caption{}
+	\label{fig:wp}
+\end{figure}
+
+\begin{enumerate}
+	\item $wp(F,\texttt{assume C})=C\implies F$\ \ \ \  $\inference{C\implies F\ \ \ C}{F}$ che è il modus ponens.
+	\item $wp(F[x], x:=e)=F[x \leftarrow e]$
+	\begin{itemize}
+		\item $F[x]$: formula dove $x$ compare
+		\item $F[x\leftarrow e]$: formula dove a $x$ si sostituisce $e$.
+	\end{itemize}
+	\item $wp(F, S_1;S_2)=wp(wp(F,S_2),S_1)$. Generalizzando $wp(F,S_1; ... ;S_n) = wp(wp(F,S_n),S_1;S_2;...;S_{n-1})$.
+\end{enumerate}
+
+Tornando ad un cammino di base generico
+\begin{lstlisting}
+	@F
+	$S_1$
+	$S_2$
+	...
+	$S_n$
+	@G
+\end{lstlisting}
+qual'è la condizione di verifica per questo cammino? Si calcola la pre-condizione più debole $wp(G,S_1;...;S_n)$. La condizione di verifica sarà $$wp(G,S_1;...;S_n)\models F\implies wp(G,S_1;...;S_n)$$ che equivale a risalire il cammino da \texttt{@G} a \texttt{@F}.
+
+
+
+

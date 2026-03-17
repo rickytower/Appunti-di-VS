@@ -11,6 +11,7 @@
 \usepackage{xspace}
 \usepackage{braket}
 \usepackage{soul}
+\usepackage{semantic}
 \usepackage[
 backend=biber,
 style=alphabetic,
@@ -21,7 +22,7 @@ sorting=ynt,
 \usepackage[dvipsnames]{xcolor}
 \newtheorem{theorem}{Teorema}
 \newcommand{\bitem}[1]{\item\textbf{#1:}\xspace}
-\newcommand{\data}[1]{\bigskip\noindent\\\textbf{Lezione del giorno:}\xspace\date{#1}}
+\newcommand{\data}[1]{\bigskip\noindent\\\textbf{Lezione del giorno:}\xspace\date{#1}\\\noindent}
 \lstset{
 	basicstyle=\ttfamily,
 	mathescape, 
@@ -38,6 +39,7 @@ sorting=ynt,
 	\tableofcontents
 	\input{lez1}
 	\input{lez2}
+	\input{lez3}
 \newpage
 \printbibliography
 \end{document}
