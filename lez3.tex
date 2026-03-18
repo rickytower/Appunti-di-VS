@@ -22,30 +22,31 @@ Stiamo dimostrando la correttezza parziale, per ogni funzione.
 		§\color{blue}@G§  §\color{blue}$\rightarrow$ post-condizione, invariante di ciclo o asserzione di altro tipo§
 	\end{lstlisting}
 \end{enumerate}
-Le $S_1,...,S_n$ sono istruzioni \textit{assume} e assegnamenti alle variabili della funzione.
+Le $S_1;...;S_n$ sono istruzioni \textit{assume} o assegnamenti alle variabili della funzione.
 \subsubsection{Esempio di LinearSearch}
-\begin{lstlisting}
-	§\color{blue}@pre: $0\le l \wedge u < |a|$\color{blue}§
-	§\color{blue}@post: rv = true $\iff$ $\exists j\colon l\le i \le u \wedge a[i]=e$§
-	Bool LinearSearch(int[]a, int l, int u, int e)
-	{
-		§\color{blue}@L: $l\le i\wedge \forall j\colon (l\le j<i \implies a[j]\ne e)$§
-		for(int i := l; i $\le$ u; i := i+1){
-			§\color{blue}@E: $0\le i < |a|$§
-			if(a[i]=e) §\color{red}(II)@L \\assume i $\le$u;\\assume a[i]=e;\\rv:=true;\\@post§
-			return true;
-		}§\color{red}(I)@pre\\i:=l;\\@L§
-		return false;
-		§\color{red}@pre$\rightarrow$I§
-	}
-\end{lstlisting}
+
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=.9\linewidth]{grafo-cammini-base}
+	\caption{grafo dei cammini di base. Facendo riferimento all'invariante di ciclo \texttt{@L}, $\forall j\colon j<i$ perché dobbiamo ancora testare $i$. Bisogna verificare l''invariante interamente. Ad esempio nel caso di $l = i$ si ha che l'implicazione è vera perché la condizione sufficiente è falsa.}
+	\label{fig:grafo-cammini-base}
+\end{figure}
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=0.7\linewidth]{trasformazione-for-in-while}
+	\caption{trasformazione del for nel while.}
+	\label{fig:trasformazione-for-in-while}
+\end{figure}
+Per costruire i cammini di base, prima si traduce il for nel while come in \cref{fig:trasformazione-for-in-while}, si fa una sorta di ``ricerca in profondità'', considerando le condizioni di ciclo e la condizione di guardia (\cref{fig:grafo-cammini-base}).
+\hl{La decomposizione del programma in cammini di base è un attività automatizzabile.}
+
 \paragraph{Trasformatore di predicato} Sia $L$ un linguaggio di formule. Un trasformatore di predicato è il prodotto cartesiano $$p\colon L\times \texttt{<stmts>}\longrightarrow L$$ dove \texttt{<stmts>} sono istruzioni. 
-\paragraph{weakest pre-condition} È un trasformatore di predicato, è una pre-condizione più debole che $$wp(F,S)$$ prende una formula e delle istruzioni e produce una formula. %58min
+\paragraph{Weakest pre-condition} È un trasformatore di predicato, è una pre-condizione più debole che $$wp(F,S)$$ prende una formula e delle istruzioni e produce una formula. %58min
 La $wp(F,S)$ è la pre-condizione più debole tale che $F$ è vera dopo aver eseguito $S$.
 \paragraph{Stato del programma}È un assegnamento al PC\footnote{Program counter.} e a tutte le variabili e i parametri della funzione. Si estende in un'interpretazione. Sia $S\colon \text{stato del programma}$. Se siamo in uno stato $s\models wp(F,S)$ e $s\,S\,s'$ e $s'$ è stato del programma allora $s'\models F$.
 \begin{figure}[thbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{wp}
+	\includegraphics[width=0.45\linewidth]{wp}
 	\caption{}
 	\label{fig:wp}
 \end{figure}
