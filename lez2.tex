@@ -72,13 +72,12 @@ e si ragiona in modo analogo a while, come prima.
 
 \paragraph{Asserzioni a tempo di esecuzione}Le asserzioni a tempo d'esecuzione (\texttt{@E}) servono a proteggere da 3 tipi di errori al runtime:
 \begin{itemize}
-	\bitem{Divisione per zero}
+	\bitem{Divisione per zero e resto per la divisione per zero}
 	\begin{lstlisting}
 		§\color{blue}@E: y $\ne$ 0§
-		z := x div y;
-		z := x mod y;
-	\end{lstlisting} se staticamente possiamo dimostrare che \texttt{y$\ne$0}, allora siamo sicuri ed \texttt{@E} non è necessaria. Se tale dimostrazione non riusciamo a darla, il controllo $y\ne 0$ deve essere eseguita a tempo d'esecuzione ed è richiesto al compilatore dall'annotazione \texttt{@E} che introduce codice che esegue il controllo e gestisce l'errore.
-	\bitem{Divisione sui reali}
+		z := x div y;			$\leftarrow$ divisione intera
+		z := x mod y;         $\leftarrow$ resto della divisione intera
+	\end{lstlisting} se staticamente possiamo dimostrare che \texttt{y$\ne$0}, allora siamo sicuri ed \texttt{@E} non è necessaria. Se tale dimostrazione non riusciamo a darla, il controllo $y\ne 0$ deve essere eseguito a tempo d'esecuzione ed è richiesto al compilatore dall'annotazione \texttt{@E} che introduce codice che esegue il controllo e gestisce l'errore.
 	\bitem{Array out of bounds}
 	\begin{lstlisting}
 		§\color{blue}@E: n $\ge$ 0 $\wedge$ n < |a|§
