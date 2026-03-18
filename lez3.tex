@@ -40,19 +40,19 @@ Le $S_1;...;S_n$ sono istruzioni \textit{assume} o assegnamenti alle variabili d
 Per costruire i cammini di base, prima si traduce il for nel while come in \cref{fig:trasformazione-for-in-while}, si fa una sorta di ``ricerca in profondità'', considerando le condizioni di ciclo e la condizione di guardia (\cref{fig:grafo-cammini-base}).
 \hl{La decomposizione del programma in cammini di base è un attività automatizzabile.}
 
-\paragraph{Trasformatore di predicato} Sia $L$ un linguaggio di formule. Un trasformatore di predicato è il prodotto cartesiano $$p\colon L\times \texttt{<stmts>}\longrightarrow L$$ dove \texttt{<stmts>} sono istruzioni. 
+\paragraph{Trasformatore di predicato} Sia $L$ un linguaggio di formule. Un trasformatore di predicato $p$ è il prodotto cartesiano $$p\colon L\times \texttt{<stmts>}\longrightarrow L$$ dove \texttt{<stmts>} sono istruzioni. Quindi il trasformatore di predicato restituisce una formula in uscita che è il risultato della trasformazione della formula in ingresso rispetto ad un blocco di istruzioni \texttt{<stmts>}.
 \paragraph{Weakest pre-condition} È un trasformatore di predicato, è una pre-condizione più debole che $$wp(F,S)$$ prende una formula e delle istruzioni e produce una formula. %58min
 La $wp(F,S)$ è la pre-condizione più debole tale che $F$ è vera dopo aver eseguito $S$.
-\paragraph{Stato del programma}È un assegnamento al PC\footnote{Program counter.} e a tutte le variabili e i parametri della funzione. Si estende in un'interpretazione. Sia $S\colon \text{stato del programma}$. Se siamo in uno stato $s\models wp(F,S)$ e $s\,S\,s'$ e $s'$ è stato del programma allora $s'\models F$.
+\paragraph{Stato del programma}È un assegnamento al PC\footnote{Program Counter.} e a tutte le variabili e i parametri della funzione. Lo stato del programma si estende in un'interpretazione. Sia $s$ uno stato del programma. Se siamo in uno stato $s\models wp(F,S)$ e $s\,S\,s'$ e $s'$ è un altro stato del programma allora $s'\models F$.
 \begin{figure}[thbp]
 	\centering
-	\includegraphics[width=0.45\linewidth]{wp}
-	\caption{}
+	\includegraphics[width=0.5\linewidth]{wp}
+	\caption{$s$ è lo stato in cui è vera $wp(F,S)$ e $s'$ è lo stato in cui è vera $F$. $S$ è un insieme di statements o istruzioni e $F$ è una formula della logica del primo ordine.}
 	\label{fig:wp}
 \end{figure}
 
 \begin{enumerate}
-	\item $wp(F,\texttt{assume C})=C\implies F$\ \ \ \  $\inference{C\implies F\ \ \ C}{F}$ che è il modus ponens.
+	\item $wp(F,\texttt{assume C})=C\implies F$\ \ \ \  $\inference{C\implies F\qquad C}{F}$ che è il modus ponens.
 	\item $wp(F[x], x:=e)=F[x \leftarrow e]$
 	\begin{itemize}
 		\item $F[x]$: formula dove $x$ compare
