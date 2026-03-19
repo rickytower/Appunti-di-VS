@@ -58,7 +58,13 @@ La $wp(F,S)$ è la pre-condizione più debole tale che $F$ è vera dopo aver ese
 		\item $F[x]$: formula dove $x$ compare
 		\item $F[x\leftarrow e]$: formula dove a $x$ si sostituisce $e$.
 	\end{itemize}
-	\item $wp(F, S_1;S_2)=wp(wp(F,S_2),S_1)$. Generalizzando $wp(F,S_1; ... ;S_n) = wp(wp(F,S_n),S_1;S_2;...;S_{n-1})$.
+	\textbf{Esempio}
+	\begin{lstlisting}
+		@F: x$\ge$0
+		x:=x+1;
+		@G: x+1$\ge$0
+	\end{lstlisting}
+	\item $wp(F, S_1;S_2)=wp(wp(F,S_2),S_1)$. Generalizzando $wp(F,S_1; ... ;S_n) = wp(wp(F,S_n),S_1;S_2;...;S_{n-1})$. Se la formula \texttt{@F} all'inizio del cammino è vera, allora è vera la pre-condizione più debole della formula alla fine del cammino rispetto alle istruzioni del cammino.  Questa è una forma di 
 \end{enumerate}
 
 Tornando ad un cammino di base generico
