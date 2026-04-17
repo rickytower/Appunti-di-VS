@@ -4,44 +4,47 @@
 \usepackage{geometry}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage[htt]{hyphenat}
 \usepackage{cleveref}
 \usepackage{xspace}
 \usepackage{braket}
 \usepackage{soul}
 \usepackage{semantic}
 \usepackage{mathtools}
-\usepackage[
-backend=biber,
-style=alphabetic,
-sorting=ynt,
-]{biblatex}
-\addbibresource{bibliography.bib}
-\graphicspath{{img/}}
+\usepackage{subcaption}
+\usepackage{framed}
+\usepackage{cancel}
+\usepackage{mdframed}
 \usepackage[dvipsnames]{xcolor}
 \newtheorem{theorem}{Teorema}
 \newcommand{\bitem}[1]{\item\textbf{#1:}\xspace}
-\newcommand{\data}[1]{\bigskip\noindent\\\textbf{Lezione del giorno:}\xspace\date{#1}\\\noindent}
+\newcommand{\aaa}[1]{\color{Purple}\text{#1}}
 \lstset{
-	basicstyle=\ttfamily,
+	basicstyle=\ttfamily\footnotesize,
 	mathescape, 
 	tabsize=4,
 	breakatwhitespace,
 	breaklines,
 	breakautoindent,
-	escapeinside={§}{§}
+	escapeinside={§}{§},
+	numbers=left,
+	numberstyle=\tiny,
+	backgroundcolor=\color{gray!5},
+	keywordstyle=\color{Blue},
+	commentstyle=\color{Green},
+	stringstyle=\color{Red},
+	language=c		
 }
+
 \title{Verifica automatica di programmi}
 \author{Riccardo Torre}
 \begin{document}
 	\maketitle
-	\tableofcontents
-	\input{lez1}
-	\input{lez2}
-	\input{lez3}
-	\input{lez4}
-\newpage
-\printbibliography
+%	\tableofcontents
+	\input{bubblesort.tex}
+%	\input{binarysearch.tex}
 \end{document}
