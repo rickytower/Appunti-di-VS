@@ -34,9 +34,9 @@ $$\overbrace{\texttt{Partitioned($a,l_1,u_1,l_2,u_2$)}}^P \equiv \forall i\ \for
 \paragraph{Weakest precondition del cammino (I)} $wp(-1 \le i < |a|\land A \land B, \\\texttt{a := a0; i := |a| - 1;})\equiv (-1 \le |a| -1  < |a| \land  P(a,0,|a| -1,|a|,|a| -1)\land S(a,|a| -1,|a| -1), \texttt{a := a0})=(-1\le |a_0| - 1 < |a_0|\land  P(a_0,0,|a_0| -1, |a_0|, |a_0| -1)\land  S(a_0, |a_0| -1, |a_0| -1))$. 
 \paragraph{Condizione di verifica per il cammino (I)}$T\implies (-1\le |a_0| - 1 < |a_0|\land  P(a_0,0,|a_0| -1, |a_0|, |a_0| -1)\land  S(a_0, |a_0| -1, |a_0| -1))$ è vera perché:
 \begin{itemize}
-	\item $P$ è vera;
-	\item $S$ è vera;
-	\item $-1 \le |a_0| -1 < |a_0|$ vera anche per $|a_0| = 0$.
+	\item $P$ è vera \gcheck
+	\item $S$ è vera \gcheck
+	\item $-1 \le |a_0| -1 < |a_0|$ vera anche per $|a_0| = 0$ \gcheck
 \end{itemize}
 \paragraph{Weakest precondition del cammino (II)}$wp(1\le i < |a| \land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j), \texttt{assume i > 0; j := 0;})\equiv i > 0\implies  1 \le i < |a| \land 0 \le 0 \le i \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1) \land P(a,0,-1,0,0)$.
 \paragraph{Condizione di verifica per il cammino (II)}$[-1 \le i  < |a| \land P(a,0,i,i+1,|a| - 1) \land S(a,i, |a| - 1)\land i > 0]\implies [ 1 \le i < |a| \land 0 \le i \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land P(a,0,-1,0,0)]$. L'implicazione è vera.
@@ -52,3 +52,19 @@ dunque la weakest precondition per il cammino (III) risulta: $[j<i\land \texttt{
 L'implicazione è vera siccome \texttt{b} è il risultato di due \texttt{store} e allora $|b| = |a|$ ed è facile vedere che vengono le altre parti dell'implicazione.
 \paragraph{Weakest precondition del cammino (IV)}$wp(1\le i < |a|\land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j, \texttt{assume j < i; assume a[j] $\le$ a[j+1]; j := j+1;}))\equiv[j < i\land select(a,j) \le select(a,j+1)]\implies[1 \le i  <|a| \land 0 \le j+1 \le i \land A \land B\land P(a,0,j,j+1,j+1)]$.
 \paragraph{Condizione di verifica per il cammino (IV)}$[1 \le i < |a| \land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j)\land j < i \land select(a,j)\le select(a,j+1)]\implies [1 \le i < |a| \land 0 \le j+1 \le i \land A \land B \land P(a,0,j,j+1,j+1)]$. L'implicazione è vera.
+\paragraph{Weakest precondition del cammino (V)}$wp(1\le i < |a|\land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1), \texttt{assume j $\ge$ i; i := i-1;})\equiv [j\ge i  ]\implies [-1 \le i-1 < |a| \land P(a,0,i-1,i,|a| -1)\land S(a,i-1,|a| -1)]$.
+\paragraph{Condizione di verifica per il cammino (V)}$[1\le i < |a| \land 0\le j \le i \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land P(a,0,j-1,j,j)\land j\ge i ]\implies [-1 \le i-1 < |a| \land P(a,0,i-1,i,|a| -1)\land S(a,i-1,|a| -1)]$. L'implicazione è vera infatti:
+\begin{itemize}
+	\item $1 \le i \implies 0 \le i-1 \color{Red}\implies\color{black} -1 \le i-1$ $\longrightarrow$ ok; $i < |a|\color{Red}\implies\color{black} i-1 < |a|$ \gcheck
+	\item $j \le i \land j \ge i \implies  j=i$. Si sostituisce $j$ con $i$: 
+	\begin{itemize}
+		\item $P(a,0,i-1,i)\land P(a,0,i,i+1,|a| -1)$ \gcheck
+		\item $S(a,i-1,|a| -1)\land P(a,0,i-1,i,i)\color{Red}\implies \color{black} S(a,i-1,|a| -1)$ \gcheck
+	\end{itemize}
+\end{itemize}
+\paragraph{Weakest precondition del cammino (VI)} $wp(S(rv,0,|rv| -1), \texttt{assume i $\le$ 0; rv := e;})\equiv [i \ge 0]\implies [S(a,0,|a| -1)]$
+\paragraph{Condizione di verifica per il cammino (VI)} $[-1 \le i < |a| \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land i \le 0]\implies S(a,0,|a| -1)$. L'implicazione è vera perché $-1 \le i\land i \le 0 \implies i =-1 \lor i = 0$
+\begin{itemize}
+	\item Se $i=-1$ allora \texttt{a} era vuoto ($|a| = 0$). Allora $S(a,-1,|a| -1)$ vero a vuoto \gcheck
+	\item Se $i = 0$ allora \texttt{a} aveva un solo elemento $S(a,-1,|a| -1)\implies S(a,0,|a| -1)$ \gcheck
+\end{itemize}
