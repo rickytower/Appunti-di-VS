@@ -20,3 +20,13 @@ Nell'analisi di funzioni ricorsive, i cammini elementari iniziano con la precond
 	§\aaa{@post: rv >= x}§
 	int g(int x){...}
 \end{lstlisting}
+Considerando una funzione che chiama $g$ $$\texttt{$\omega$ := g(n+1)}$$
+$n$ è definita nella funzione che chiama $g$. Bisogna annotare la chiamata di $g$:
+\begin{lstlisting}
+	§\aaa{@R1: n + 1 $\ge$ 0}§ // $\color{Green}\rightarrow$ asserzione in chiamata
+	$\omega$ := g(n+1);
+\end{lstlisting}
+\begin{enumerate}
+	\item Almeno un cammino che termina su $@R$
+	\item Almeno un cammino che includa: \texttt{... assume v $\ge$ n+1; $\omega$ := v;} con \texttt{v} valore gestito da $g$.
+\end{enumerate}
