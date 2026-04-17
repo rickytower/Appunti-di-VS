@@ -47,4 +47,8 @@ $$\overbrace{\texttt{Partitioned($a,l_1,u_1,l_2,u_2$)}}^P \equiv \forall i\ \for
 	 \item combinando la seconda e la terza formula si ottiene \texttt{a $\leftarrow$ {\color{Blue}store(\color{Red}store(a, j, select(a, j+1))\color{Blue}, j+1, t)}}e sostituendo \texttt{t} con la prima formula si ottiene \texttt{a $\leftarrow$ }\texttt{\color{Blue}store(\color{Red}store(a, j, select(a, j+1))\color{Blue}, j+1, \color{Green}select(a,j)\color{Blue})}$\equiv \texttt{b}$ dove \texttt{b} è una \textbf{variabile temporanea} di tipo array.
 \end{mdframed}
 dunque la weakest precondition per il cammino (III) risulta: $[j<i\land \texttt{select}(a,j)>\texttt{select}(a,j+1)]\implies [1\le i < |b| \land 0 \le j+1 \le i \land P(b,0,i,i+1, |b| -1)\land S(b,i,|b| -1)\land P(b,0,j,j+1,j+1)]$
-\paragraph{Condizione di verifica per il cammino (III)}
+\paragraph{Condizione di verifica per il cammino (III)}$[1 \le i < |a| \land 0 \le j \le i \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land P(a,0,j-1,j,j)\land j < i \land \texttt{select}(a,j)>\texttt{select}(a,j+1)]\implies [1\le i < |b| \land 0 \le j+1 \le i \land P(b,0,i,i+1,|b| -1)\land S(b,i,|b| -1)\land P(b,0,j,j+1,j+1)]$.
+
+L'implicazione è vera siccome \texttt{b} è il risultato di due \texttt{store} e allora $|b| = |a|$ ed è facile vedere che vengono le altre parti dell'implicazione.
+\paragraph{Weakest precondition del cammino (IV)}$wp(1\le i < |a|\land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j, \texttt{assume j < i; assume a[j] $\le$ a[j+1]; j := j+1;}))\equiv[j < i\land select(a,j) \le select(a,j+1)]\implies[1 \le i  <|a| \land 0 \le j+1 \le i \land A \land B\land P(a,0,j,j+1,j+1)]$.
+\paragraph{Condizione di verifica per il cammino (IV)}$[1 \le i < |a| \land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j)\land j < i \land select(a,j)\le select(a,j+1)]\implies [1 \le i < |a| \land 0 \le j+1 \le i \land A \land B \land P(a,0,j,j+1,j+1)]$. L'implicazione è vera.
