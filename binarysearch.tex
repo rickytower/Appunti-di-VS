@@ -1,1 +1,22 @@
 \section{BinarySearch}
+\paragraph{Ricorsione}Correttezza parziale di funzioni ricorsive via generazione delle chiamate di funzione sui cammini elementari:
+\begin{itemize}
+	\item Asserzioni in chiamata;
+	\item Sommario di chiamata:
+	\begin{lstlisting}[caption={profilo della funzione f}]
+		§\aaa{@pre: F[p1,...,pn]}§ // sono i parametri formali di una funzione f
+		§\aaa{@post: G[P1, ... Pn, rv]}§ // con rv valore restituito
+		typeo f(type p1, ... type pn)   
+	  //typeo $\color{Green}\omega$ := f(e1, ... ,en); $\color{Green}\rightarrow$ chiamata di f
+	\end{lstlisting}
+	\item Occorre almeno un cammino che termini con \texttt{@R: F[e1,...,en]} applicando la sostituzione di \texttt{p1,...,pn} con \texttt{e1,...,en}.
+	\item Dimostrare la validità della condizione di verifica associata a ogni cammino che termina. L'asserzione di chiamata serve a dimostrare che la chiamata della funzione soddisfa la precondizione delle funzione.
+	\item Occorre almeno un cammino che includa il sommario di chiamata \texttt{assume G[e1,...,en, v]; $\omega$ := v;} dove $v$ è il valore restituito dalla funzione chiamata ed \texttt{e1,...,en} sostituiscono \texttt{p1,...,pn}.
+\end{itemize}
+Nell'analisi di funzioni ricorsive, i cammini elementari iniziano con la precondizione e finiscono con la postcondizione o con un'altra asserzione.
+\subsection{Esempio}
+\begin{lstlisting}
+	§\aaa{@pre: x >= 0}§
+	§\aaa{@post: rv >= x}§
+	int g(int x){...}
+\end{lstlisting}
