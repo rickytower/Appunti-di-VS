@@ -50,7 +50,7 @@ dunque la weakest precondition per il cammino (III) risulta: $[j<i\land \texttt{
 \paragraph{Condizione di verifica per il cammino (III)}$[1 \le i < |a| \land 0 \le j \le i \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land P(a,0,j-1,j,j)\land j < i \land \texttt{select}(a,j)>\texttt{select}(a,j+1)]\implies [1\le i < |b| \land 0 \le j+1 \le i \land P(b,0,i,i+1,|b| -1)\land S(b,i,|b| -1)\land P(b,0,j,j+1,j+1)]$.
 
 L'implicazione è vera siccome \texttt{b} è il risultato di due \texttt{store} e allora $|b| = |a|$ ed è facile vedere che vengono le altre parti dell'implicazione.
-\paragraph{Weakest precondition del cammino (IV)}$wp(1\le i < |a|\land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j, \texttt{assume j < i; assume a[j] $\le$ a[j+1]; j := j+1;}))\equiv[j < i\land select(a,j) \le select(a,j+1)]\implies[1 \le i  <|a| \land 0 \le j+1 \le i \land A \land B\land P(a,0,j,j+1,j+1)]$.
+\paragraph{Weakest precondition del cammino (IV)}$wp(1\le i < |a|\land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j, \texttt{assume j < i; assume a[j] $\le$ a[j+1]; j := j+1;}))\equiv[j < i\land select(a,j) \le select(a,\\j+1)]\implies[1 \le i  <|a| \land 0 \le j+1 \le i \land A \land B\land P(a,0,j,j+1,j+1)]$.
 \paragraph{Condizione di verifica per il cammino (IV)}$[1 \le i < |a| \land 0 \le j \le i \land A \land B \land P(a,0,j-1,j,j)\land j < i \land select(a,j)\le select(a,j+1)]\implies [1 \le i < |a| \land 0 \le j+1 \le i \land A \land B \land P(a,0,j,j+1,j+1)]$. L'implicazione è vera.
 \paragraph{Weakest precondition del cammino (V)}$wp(1\le i < |a|\land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1), \texttt{assume j $\ge$ i; i := i-1;})\equiv [j\ge i  ]\implies [-1 \le i-1 < |a| \land P(a,0,i-1,i,|a| -1)\land S(a,i-1,|a| -1)]$.
 \paragraph{Condizione di verifica per il cammino (V)}$[1\le i < |a| \land 0\le j \le i \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land P(a,0,j-1,j,j)\land j\ge i ]\implies [-1 \le i-1 < |a| \land P(a,0,i-1,i,|a| -1)\land S(a,i-1,|a| -1)]$. L'implicazione è vera infatti:
@@ -62,7 +62,7 @@ L'implicazione è vera siccome \texttt{b} è il risultato di due \texttt{store} 
 		\item $S(a,i-1,|a| -1)\land P(a,0,i-1,i,i)\color{Red}\implies \color{black} S(a,i-1,|a| -1)$ \gcheck
 	\end{itemize}
 \end{itemize}
-\paragraph{Weakest precondition del cammino (VI)} $wp(S(rv,0,|rv| -1), \texttt{assume i $\le$ 0; rv := e;})\equiv [i \ge 0]\implies [S(a,0,|a| -1)]$
+\paragraph{Weakest precondition del cammino (VI)} $wp(S(rv,0,|rv| -1), \texttt{assume i $\le$ 0; rv := e;})\\\equiv [i \ge 0]\implies [S(a,0,|a| -1)]$
 \paragraph{Condizione di verifica per il cammino (VI)} $[-1 \le i < |a| \land P(a,0,i,i+1,|a| -1)\land S(a,i,|a| -1)\land i \le 0]\implies S(a,0,|a| -1)$. L'implicazione è vera perché $-1 \le i\land i \le 0 \implies i =-1 \lor i = 0$
 \begin{itemize}
 	\item Se $i=-1$ allora \texttt{a} era vuoto ($|a| = 0$). Allora $S(a,-1,|a| -1)$ vero a vuoto \gcheck

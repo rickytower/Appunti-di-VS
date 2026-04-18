@@ -30,3 +30,42 @@ $n$ è definita nella funzione che chiama $g$. Bisogna annotare la chiamata di $
 	\item Almeno un cammino che termina su $@R$
 	\item Almeno un cammino che includa: \texttt{... assume v $\ge$ n+1; $\omega$ := v;} con \texttt{v} valore gestito da $g$.
 \end{enumerate}
+La funzione che chiama $g$:
+\begin{lstlisting}
+	§\aaa{@R: n+1 $\ge$ 0}§
+	return g(n+1);
+\end{lstlisting}
+\begin{itemize}
+	\item Almeno un cammino (nella funzione chiamante) che termina su \texttt{@R}.
+	\item Almeno un cammino che includa \texttt{assume v $\ge$ n+1; rv := v;}.
+	\subsection{BinarySearch}
+	\begin{lstlisting}
+		§\aaa{@pre: $0\le l\land u < |a|\land Sorted(a,l,u)$}§
+		§\aaa{@post: $rv \iff \exists i\colon l\le i \le u\land a[i]=e$}§
+		Bool BinarySearch(int[] a, int l, int u, int e){
+			if(l > u){
+				return false;
+			}
+			else{
+				int n := (l+u) div 2; // dove in generale $\color{Green}u\textit{ div }b=\left\lfloor\frac{a}{b}\right\rfloor$
+				if(a[m] = e){
+					return true;
+				}
+				else{
+					if(a[m] < e){
+						§\aaa{@R1: $0\le n+1 \land u < |a| \land Sorted(a, m + 1, u)$}§
+						return BinarySearch(a, m+1, u, e);
+					}
+					else{
+						§\aaa{@R2: $0\le l \land n-1 < |a| \land Sorted(a,l,m-1)$}§
+						return BinarySearch(a, l, m - 1, e);
+					}
+				}
+			}
+		}
+	\end{lstlisting}
+\end{itemize}
+\subsection{Cammini elementari di BinarySearch}
+\paragraph{Weakest precondition del cammino (I)}$wp(rv \iff \exists i \colon l \le i \le u \land a[i] = e, \texttt{assume l >}\\\texttt{u; rv := false})\equiv [l > u]\implies [\exists i \colon l \le i \le u \land a[i] = e]$.
+\paragraph{Condizione di verifica per il cammino (I)}$[0\le l \land u < |a| < S(a,l,u)\land l>u]\implies\footnote{$P\implies Q\equiv \neg P \lor Q$}[\forall i \colon\\ l \le i \le u\implies a[i]\ne e]$
+\paragraph{Weakest precondition del cammino (II)}$wp(\omega\iff \exists i \colon l \le i \le u \land a[i]=e, \texttt{assume l}\\\texttt{ $\le$ u;}\texttt{m := (l + u) div 2; assume a[m] = e; $\omega$ := true})\equiv wp(\exists i \colon l \le i \le u \land a[i] = e, \texttt{assume l}\texttt{$\le$ u; m := (l + u) div 2; assume a[m] = e;})\equiv wp([a[m]=e]\implies [\exists i \colon l\le i\le u \land a[i] = e], \texttt{assume l $\le$ u; m := (l + u) div 2;})\equiv wp([a[(l+u)\textit{ div }2]=e]\implies[\exists i \colon l\le i\le u\land a[i] = e],\texttt{assume l $\le$ u;})\equiv [l \le u \land a[(l+u)\textit{ div }2]=e]\implies [\exists i \colon l\le i\le u \land a[i]=e]$
