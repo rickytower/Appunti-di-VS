@@ -1,2 +1,101 @@
-\date{9 aprile 2026}
-\beginlstlisgin
+\section{Seconda parte del corso}
+Un compilatore-verificatore (\cref{fig:compilatore-verificatore}) prende in ingresso un programma annotato $P$ in un linguaggio sorgente $L$ e restituisce in uscita un programma $P'$ scritto in linguaggio oggetto $L_o$ e le condizioni di verifica $\{\phi_1, \dots, \phi_k\}$ che sono formule in una combinazione $\uptau$ di teorie in logica del primo ordine. 
+Ciascuna condizione di verifica viene data ad una procedura di decisione per la soddisfacibilità in $\uptau$.
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=0.7\linewidth]{decisore}
+	\caption{decisore.}
+	\label{fig:decisore}
+\end{figure}
+La procedura può restituire:
+\begin{itemize}
+	\bitem{soddisfacibile}quando $\phi_i$ non è valida cioè il contromodello (o controesempio) per $\phi_i$: $M\models \neg \phi_i$;
+	\bitem{insoddisfacibile}$\phi_i\vdash_\uptau \bot $  ovvero la dimostrazione di inosddisfacibilità è anche dimostrazione di validità di $\phi_i$.
+\end{itemize}
+La procedura di decisione per la soddisfacibilità in $\uptau$ è un \textbf{solutore SAT}.
+
+\begin{mdframed}
+	\paragraph{SAT}SAT è il problema della soddisfacibilità proposizionale:
+	\begin{itemize}
+		\bitem{ingresso}una formula proposizionale
+		\bitem{uscita}$
+		\begin{cases}
+			\text{sì con un modello}\\
+			\text{no con una dimostrazione}
+		\end{cases}$
+	\end{itemize} 
+\end{mdframed}
+SAT è un problema  NP-arduo e NP-completo. 
+\paragraph{Intepretazione}Un'interpretazione $A$ è un assegnamento di valori alle variabili: $$v\colon\mathcal{A}\to\{\textit{vero, falso}\}$$ dove $A$ è insieme delle variabili proposizionali booleane. Con $n$ variabili ci sono $2^n$ interpretazioni possibili per $n=|A|$.
+
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=0.7\linewidth]{interpretazioni}
+	\caption{albero delle interpretazioni. Vi sono $2^n$ foglie e $2^n$ rami o cammini.}
+	\label{fig:interpretazioni}
+\end{figure}
+
+Per ogni $x\in A$, $x$ è una formula detta \textbf{atomo}, o \textit{formula atomica}. Se $F$ e $G$ sono formule, allora anche $\neg F$, $F\land G$, $F\lor G$, $F\implies G$, $F\iff G$ sono formule.
+
+\paragraph{Letterale}Un \textit{letterale} è un atomo (\textit{letterale positivo}) oppure la negazione di un atomo (\textit{letterale negativo}). Le procedure per SAT lavorano su un insieme di clausole. 
+\paragraph{Clausola}Una \textit{clausola} è una \ul{disgiunzione di letterali}.
+
+\paragraph{Insieme di clausole}Un \textit{insieme di clausole} è la congiunzione delle clausole nell'insieme.
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=0.7\linewidth]{schema-satsolver}
+	\caption{schema SAT solver.}
+	\label{fig:schema-satsolver}
+\end{figure}
+
+Ogni formula può essere portata in \textbf{forma normale congiunta (CNF)}.
+\paragraph{CNF} È una congiunzione di clausole (detta anche \textit{forma clausale}).
+C'è anche la \textit{forma normale disgiunta}, una disgiunzione di letterali. In gergo, una \ul{congiunzione di letterali} viene detta \textit{cubo}.
+
+L'applicazione sistematica delle seguenti regole
+\begin{gather*}
+	F\iff G \equiv (F\implies G)\land (G\implies F)\\
+	F\implies G\equiv \neg F \lor G\\
+	\neg(\neg F)\equiv F\\
+	\neg(F\lor G)\equiv \neg F \land \neg G\\
+	\neg(F\land G)\equiv \neg F \lor \neg G
+\end{gather*}
+porta alla \textbf{forma normale negata}, formula dove i soli connettivi sono solo $\lor,\land,\neg$ e si applica soltanto ad atomi.
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=0.7\linewidth]{dnf-cnf}
+	\caption{dnf e cnf.}
+	\label{fig:dnf-cnf}
+\end{figure}
+\begin{enumerate}
+	\item $F\land (G\lor H)\rightarrow (F\land G)\lor (F\land H)$
+	\item $F\lor (G\land H)\rightarrow (F\lor G)\land (F\lor H)$
+\end{enumerate}
+\paragraph{ECNF} La ECNF è l'acronimo di \textit{forma normale congiunta equisoddisfacibile}. L'equisoddisfacibilità è logicamente più debole dell'equivalenza.
+\paragraph{Equivalenza logica} $F$ e $G$ sono logicamente equivalenti se per ogni interpretazione $v$ $$v(f)=v(g)$$ o equivalentemente$$\forall v \colon v\models F\iff v\models G$$ \paragraph{Equisoddisfacibilità}$F$ e $G$ sono equisoddisfacibili se $$\textit{$F$ è soddisfacibile}\iff \textit{$G$ è soddisfacibile}$$ovvero $$\exists v\colon v\models F\iff \exists v'\colon v'\models G$$
+\paragraph{Esempio}Supponiamo che $F=A\lor (B\land C)$ e $A\lor(B\land C)\iff (A\lor B)\land (A\lor C)$. Sia $X\notin A$ ovvero è una nuova variabile. $X$ è equivalente a $B\land C$. 
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=.9\linewidth]{esempio-equisodd}
+	\caption{$F$ ed $S$ non sono equivalenti ma sono equisoddisfacibili.}
+	\label{fig:esempio-equisodd}
+\end{figure}
+\subsection{Trasformazione ECNF}La trasformazione ECNF avviene applicando due funzioni. Sia $\mathcal{L}$ l'insieme delle formule proposizionali, $\top,\bot\in \mathcal{L}$ mentre $\mathcal{L}_A$ è l'insieme delle formule atomiche (ad esempio $\{\bot,\top,x,\textit{Var}\}$)
+\begin{itemize}
+	\item $\textit{Rep}\colon \mathcal{L}\to\mathcal{L}_A$ è la funzione \textit{reppresentative}.
+	\item $\varepsilon_n\colon \mathcal{L}\to\mathcal{L}$ è la funzione di \textit{encoding}$$\en{F}\iff (F\iff \rep{F})$$
+\end{itemize}
+\paragraph{Caso atomico}\begin{equation*}
+	\begin{cases}
+		\rep{\bot}=\bot\\\rep{\top}=\top\\\rep{x}=x\textit{ se $x$ è una variabile proposizionale}
+	\end{cases}
+\end{equation*}
+\paragraph{Caso non atomico}$\rep{F}=P_F$ dove $P_F$ è una nuova variabile proposizionale.
+\paragraph{Esempio} $(P\land Q)\implies (P\lor(\neg R\land Q))$ Si ottiene l'albero in \cref{fig:albero-esempio}
+\begin{figure}[tbph]
+	\centering
+	\includegraphics[width=0.5\linewidth]{albero-esempio}
+	\caption{albero esempio.}
+	\label{fig:albero-esempio}
+\end{figure}
+ Avendo $F\in \mathcal{L}$ diventa
